@@ -15,5 +15,8 @@ A production-grade Ubuntu file explorer with column view similar to macOS Finder
 
 ## Build
 ```bash
+# Install dependencies (Ubuntu/Debian)
+sudo apt install libgtk-4-dev libdbus-1-dev libgirepository1.0-dev pkg-config
+
 make build
 ```
