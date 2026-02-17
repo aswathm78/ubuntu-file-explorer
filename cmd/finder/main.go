@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"os"
 
 	"github.com/diamondburned/gotk4/pkg/gio/v2"
@@ -27,6 +28,12 @@ func activate(app *gtk.Application) {
 	bus := event.NewMemoryBus()
 	fileSys := fs.NewLocalFileSystem()
 	stack := navigation.NewStackManager(fileSys)
+
+	// Set default view to Home
+	home, err := os.UserHomeDir()
+	if err == nil {
+		stack.NavigateTo(context.Background(), home)
+	}
 
 	// Create main window
 	window := ui.NewMainWindow(app, bus, stack)
