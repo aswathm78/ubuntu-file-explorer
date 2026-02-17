@@ -35,11 +35,8 @@ func (mw *MainWindow) setupUI() {
 	mw.SetChild(box)
 
 	// Sidebar
-	sidebar := gtk.NewBox(gtk.OrientationVertical, 0)
-	sidebar.SetSizeRequest(200, -1)
-	sidebar.SetHExpand(false)
-	sidebar.Append(gtk.NewLabel("Sidebar Placeholder"))
-	box.Append(sidebar)
+	sb := sidebar.NewSidebar()
+	box.Append(sb)
 
 	// Separator
 	box.Append(gtk.NewSeparator(gtk.OrientationVertical))

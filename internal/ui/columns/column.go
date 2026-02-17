@@ -1,6 +1,7 @@
 package columns
 
 import (
+	"github.com/diamondburned/gotk4/pkg/core/glib"
 	"github.com/diamondburned/gotk4/pkg/gio/v2"
 	"github.com/diamondburned/gotk4/pkg/gtk/v4"
 	"github.com/user/finder-clone/internal/core/fs"
@@ -20,16 +21,18 @@ func NewColumn(path string, files []fs.FileInfo) *Column {
 	// Create a ListStore to hold our data (simplification for now)
 	// In a real production app with 100k+ files, we'd use a custom GListModel
 	// that loads data on demand.
-	store := gio.NewListStore(gio.GTypeObject) // This might need refinement for file objects
+	store := gio.NewListStore(glib.TypeObject) // This might need refinement for file objects
 
 	// Factory for creating list items
 	factory := gtk.NewSignalListItemFactory()
-	factory.ConnectSetup(func(listItem *gtk.ListItem) {
+	factory.ConnectSetup(func(obj *glib.Object) {
+		listItem := obj.Cast().(*gtk.ListItem)
 		label := gtk.NewLabel("")
 		listItem.SetChild(label)
 	})
 
-	factory.ConnectBind(func(listItem *gtk.ListItem) {
+	factory.ConnectBind(func(obj *glib.Object) {
+		// listItem := obj.Cast().(*gtk.ListItem)
 		// Bind data to label here
 		// obj := listItem.Item()
 		// label := listItem.Child().(*gtk.Label)
@@ -39,7 +42,7 @@ func NewColumn(path string, files []fs.FileInfo) *Column {
 	// Selection model
 	selModel := gtk.NewSingleSelection(store)
 
-	listView := gtk.NewListView(selModel, factory)
+	listView := gtk.NewListView(selModel, &factory.ListItemFactory)
 	scroll.SetChild(listView)
 
 	return &Column{
